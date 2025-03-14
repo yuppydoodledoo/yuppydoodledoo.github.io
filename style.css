@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Gaegu&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+/* Set height of body and the document to 100% to enable "full page tabs" */
+body, html {
+    height: 100%; 
+    margin: 1%;
+    font-family: Gaegu;
+    background-color: #b3cde0;
+  }
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #b3cde0;
+    padding: 2px 0;
+    text-align: center;
+    z-index: 1000;
+  }
+
+  .navbar a {
+      color: white;
+      text-decoration: none;
+      padding: 4px 20px;
+      display: inline-block;
+  }
+
+  .navbar a:hover {
+      color: #575757;
+  }
+
+  /* The subnavigation menu */
+.subnav {
+  overflow: hidden;
+  align-items: center;
+}
+
+/* Subnav button */
+.subnav .subnavbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 10px 10px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+/* Subnav dropdown fix */
+.subnav-content {
+  position: absolute;
+  left: 0;
+  top: 100%; /* Dropdown appears right below the button */
+  min-width: 160px;
+  background-color: #b3cde0;
+  border-radius: 5px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  display: none;
+}
+
+/* Style the subnav links */
+.subnav-content a {
+  float: left;
+  color: white;
+  text-decoration: none;
+}
+
+/* Add a grey background color on hover */
+.subnav-content a:hover {
+  background-color: #eee;
+  color: black;
+}
+
+/* When you move the mouse over the subnav container, open the subnav content */
+.subnav:hover .subnav-content {
+  display: block;
+}
+/* Navbar items */
+/* Align the navbar links and subnav on the same baseline */
+.navbar a, .subnav {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle; /* Ensures they align properly */
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+}
