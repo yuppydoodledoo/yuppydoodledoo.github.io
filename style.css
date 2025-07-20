@@ -52,11 +52,11 @@ body, html {
 }
 
 .navbar-logo {
-    width: 100px; /* adjust as needed */
+    width: 100px;
     height: auto;
     margin-bottom: 20px;
     margin-top: 10px;
-    border-radius: 50%; /* makes it a circle if you want */
+    border-radius: 50%; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
