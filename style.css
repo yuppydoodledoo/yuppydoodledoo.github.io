@@ -119,22 +119,6 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-.section-box {
-    /*font-family: "Delius", cursive;*/
-    /*width: 90%;
-    border-style: double;
-    border-color: #ba14b4;
-    border-width: 5px;
-    border-radius: 5px;
-    padding: 20px;
-    margin: 10px;
-    margin-left: 0;
-    overflow: auto;
-    position: relative;
-    background-color: #ffffff;
-    */
-}
-
 .social-container {
   display: flex;
   gap: 30px;
