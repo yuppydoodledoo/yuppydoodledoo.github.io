@@ -135,3 +135,64 @@ h1, h2, h3, h4, h5, h6 {
     */
 }
 
+.social-container {
+  display: flex;
+  gap: 30px;
+  padding: 20px;
+}
+
+.social-item {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* The Link Wrapper */
+.icon-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+/* The SVG Icon Style */
+.icon-svg {
+  width: 28px;
+  height: 28px;
+  fill: #967bb6; /* The gold color from your screenshot */
+  transition: fill 0.2s ease;
+}
+
+.icon-link:hover .icon-svg {
+  fill: #d28efe; /* Brightens slightly on hover */
+}
+
+.social-item:hover .icon-link {
+  transform: scale(1.1);
+}
+
+/* The Username Pill */
+.username {
+  position: absolute;
+  bottom: 140%; /* Positioned above the icon */
+  background-color: #ffdef2;
+  color: #fd77c8;
+  padding: 6px 14px;
+  border-radius: 25px;
+  border: 1.5px solid #fd77c8;
+  font-family: 'Gaegu', cursive;
+  font-size: 14px;
+  white-space: nowrap;
+  
+  /* Hidden state */
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+}
+
+/* Reveal logic */
+.social-item:hover .username {
+  opacity: 1;
+  transform: translateY(0);
+}
