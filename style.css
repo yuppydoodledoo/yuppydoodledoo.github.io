@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Gaegu&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Delius&family=Gaegu&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+html {
+  scroll-behavior: smooth;
+}
 
 body, html {
     margin: 0;
     font-family: Gaegu;
     background-image: linear-gradient(to left, #b4dae5, #e5beff, #ffdef2);
-    margin-left: 100px;
 }
 
 .navbar {
@@ -43,12 +43,17 @@ body, html {
 .subnav-content {
     position: relative;
     background-image: linear-gradient(to bottom, #b4dae5, #e5beff, #ffdef2);
-    display: none;
-    width: 100%;
+    
+    display: block;      
+    max-height: 0;       
+    overflow: hidden;    
+    opacity: 0;         
+    transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
 .subnav:hover .subnav-content {
-    display: block;
+    max-height: 200px;  
+    opacity: 1;
 }
 
 .navbar-logo {
@@ -62,7 +67,9 @@ body, html {
 
 
 .wrapper {
-    padding: 20px;
+    margin-left: 200px; 
+    padding: 20px; 
+    max-width: 900px; 
 }
 
 .writing-wrapper {
@@ -97,6 +104,10 @@ body, html {
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Gaegu', cursive;
     color: #333;
+}
+
+h1, h2, h3 {
+  scroll-margin-top: 20px; 
 }
 
 @media screen and (max-width: 768px) {
@@ -155,7 +166,7 @@ h1, h2, h3, h4, h5, h6 {
   transform: scale(1.1);
 }
 
-/* The Username Pill */
+/* For Socials */
 .username {
   position: absolute;
   bottom: 140%; /* Positioned above the icon */
@@ -179,4 +190,90 @@ h1, h2, h3, h4, h5, h6 {
 .social-item:hover .username {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Smoother page-to-page transition */
+/* --- Sidebar Animation --- */
+.navbar {
+    opacity: 0;
+    transform: translateX(-50px); /* Start slightly off-screen to the left */
+}
+
+.nav-entrance {
+    animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideInLeft {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* --- Main Content Animation --- */
+.wrapper {
+    opacity: 0;
+    transform: translateY(20px); /* Start slightly lower */
+}
+
+.content-entrance {
+    animation: fadeInLift 0.8s ease-out 0.2s forwards; /* 0.2s delay so it follows the nav */
+}
+
+@keyframes fadeInLift {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.flower-container {
+    position: fixed;
+    bottom: 0;
+    right: 30px;
+    width: 250px;
+    height: 300px;
+    z-index: 999;
+}
+
+.flower { position: absolute; bottom: 0; }
+
+/* Dynamic sizing/positioning */
+.flower-1  { right: 60px; transform: scale(1.5); --stem: 120px; }
+.flower-2 { right: 140px; transform: scale(1.2); --stem: 120px; }
+.flower-3 { right: 210px; transform: scale(0.9); --stem: 90px; }
+.flower-4 { right: 280px; transform: scale(0.7); --stem: 80px; }
+
+.leaf {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    height: var(--stem);
+    background: #a8d5ba;
+    border-radius: 2px;
+}
+
+.petal {
+    position: absolute;
+    bottom: var(--stem); /* Places petals at the top of the stem */
+    left: 50%;
+    width: 45px;
+    height: 45px;
+    border-radius: 50% 50% 50% 0;
+    transform-origin: bottom left;
+    transform: rotate(var(--rotation)) scale(0);
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.flower-container:hover .petal {
+    animation: bloom 2.5s infinite ease-in-out;
+}
+
+@keyframes bloom {
+    0% { transform: rotate(var(--rotation)) scale(0); opacity: 0; }
+    50% { transform: rotate(var(--rotation)) scale(1.1); opacity: 1; }
+    100% { transform: rotate(var(--rotation)) scale(1); opacity: 1; }
 }
