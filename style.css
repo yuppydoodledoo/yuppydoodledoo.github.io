@@ -227,53 +227,170 @@ h1, h2, h3 {
     }
 }
 
+/* Full-screen click-through overlay for the cursor trail.
+   pointer-events:none so it never blocks clicks or text selection. */
 .flower-container {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+}
+
+/* The fixed little garden in the bottom-right corner (blooms once on load). */
+.corner-garden {
     position: fixed;
     bottom: 0;
     right: 30px;
-    width: 250px;
+    width: 340px;
     height: 300px;
-    z-index: 999;
+    pointer-events: none;
+    z-index: 998;
 }
 
-.flower { position: absolute; bottom: 0; }
+/* A flower is a zero-size anchor; its petals + centre radiate around it.
+   Trail flowers are placed via inline left/top; corner flowers via .flower-N. */
+.flower {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 1;
+    transition: opacity 1s ease;   /* fade-out before removal (trail only) */
+}
+.flower.fade { opacity: 0; }
 
-/* Dynamic sizing/positioning */
-.flower-1  { right: 60px; transform: scale(1.5); --stem: 120px; }
+/* Corner flowers stand on the ground, sized/placed and given a stem length. */
+.corner-garden .flower { bottom: 0; }
+.flower-1 { right: 60px;  transform: scale(1.5); --stem: 120px; }
 .flower-2 { right: 140px; transform: scale(1.2); --stem: 120px; }
-.flower-3 { right: 210px; transform: scale(0.9); --stem: 90px; }
-.flower-4 { right: 280px; transform: scale(0.7); --stem: 80px; }
+.flower-3 { right: 210px; transform: scale(0.9); --stem: 90px;  }
+.flower-4 { right: 280px; transform: scale(0.7); --stem: 80px;  }
 
-.leaf {
+/* --- Stem (corner flowers only) --- */
+.stem {
     position: absolute;
     bottom: 0;
-    left: 50%;
+    left: 0;
     width: 4px;
     height: var(--stem);
-    background: #a8d5ba;
-    border-radius: 2px;
+    margin-left: -2px;
+    background: linear-gradient(to top, #8fc9a6, #b6e0c4);
+    border-radius: 3px;
+    transform-origin: bottom center;
+    transform: scaleY(0);
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.corner-garden.grown .stem { transform: scaleY(1); }
 
+.stem-leaf {
+    position: absolute;
+    left: 3px;
+    top: 42%;
+    width: 22px;
+    height: 12px;
+    background: #a8d5ba;
+    border-radius: 0 100% 0 100%;
+    transform-origin: left center;
+    transform: rotate(-18deg) scale(0);
+    transition: transform 0.5s ease 0.5s;
+}
+.corner-garden.grown .stem-leaf { transform: rotate(-18deg) scale(1); }
+
+/* --- Petals (shared) --- */
 .petal {
     position: absolute;
-    bottom: var(--stem); /* Places petals at the top of the stem */
-    left: 50%;
-    width: 45px;
-    height: 45px;
-    border-radius: 50% 50% 50% 0;
-    transform-origin: bottom left;
-    transform: rotate(var(--rotation)) scale(0);
+    bottom: var(--stem, 0px);      /* corner: top of the stem; trail: the anchor */
+    left: 0;
+    width: 30px;
+    height: 46px;
+    margin-left: -15px;            /* centre the petal on the anchor */
+    border-radius: 50% 50% 50% 50% / 66% 66% 34% 34%;
+    background: radial-gradient(ellipse at 50% 28%, var(--glow, #ffd9ec), var(--edge, #ff9ec4) 78%);
+    box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.06);
+    transform-origin: 50% 100%;    /* pivot at the base = the flower centre */
+    /* Pre-bloom: furled inward and closed */
+    transform: rotate(calc(var(--rotation) - 55deg)) scale(0);
     opacity: 0;
-    transition: all 0.5s ease-in-out;
-    border: 1px solid rgba(255,255,255,0.2);
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.5s ease;
+    transition-delay: var(--delay, 0s);
 }
 
-.flower-container:hover .petal {
-    animation: bloom 2.5s infinite ease-in-out;
+/* Bloomed: corner garden opens via .in, trail flowers via .open.
+   Both then settle into a gentle breathing. */
+.corner-garden.in .petal,
+.flower.open .petal {
+    transform: rotate(var(--rotation)) scale(1);
+    opacity: 0.92;
+    animation: breathe 4.5s ease-in-out infinite;
+    animation-delay: calc(var(--delay, 0s) + 0.8s);
 }
 
-@keyframes bloom {
-    0% { transform: rotate(var(--rotation)) scale(0); opacity: 0; }
-    50% { transform: rotate(var(--rotation)) scale(1.1); opacity: 1; }
-    100% { transform: rotate(var(--rotation)) scale(1); opacity: 1; }
+@keyframes breathe {
+    0%, 100% { transform: rotate(var(--rotation)) scale(1);    }
+    50%      { transform: rotate(var(--rotation)) scale(1.05); }
 }
+
+/* --- Flower centre (pistil) --- */
+.core {
+    position: absolute;
+    bottom: var(--stem, 0px);
+    left: 0;
+    width: 20px;
+    height: 20px;
+    margin: 0 0 -10px -10px;       /* centre on the anchor */
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #fff6c9, #ffcf5e 70%, #f4b53f);
+    box-shadow: 0 0 7px rgba(255, 200, 80, 0.6);
+    z-index: 2;
+    transform: scale(0);
+    transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition-delay: var(--delay, 0s);
+}
+.corner-garden.in .core,
+.flower.open .core { transform: scale(1); }
+
+/* --- Content cards (were referenced in HTML but never styled) --- */
+.section-box {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 14px;
+    padding: 2px 22px;
+    margin: 12px 0 26px;
+    box-shadow: 0 4px 16px rgba(150, 123, 182, 0.12);
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- Photo gallery styling --- */
+.wrapper img:not(.navbar-logo),
+.section-box img {
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    margin: 6px 8px 6px 0;
+    vertical-align: middle;
+    max-width: 100%;
+    height: auto;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.wrapper img:not(.navbar-logo):hover,
+.section-box img:hover {
+    transform: scale(1.03) rotate(-1deg);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+}
+
+/* Let the small interests photos flow as a wrapping gallery row */
+.photo-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-end;
+    margin: 10px 0 20px;
+}
+.photo-grid img { margin: 0; }

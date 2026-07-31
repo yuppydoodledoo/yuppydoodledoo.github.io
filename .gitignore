@@ -1,0 +1,3 @@
+# Local-only backup of full-resolution originals (see images/original/).
+# Kept out of the repo so the published site stays small.
+images/original/
